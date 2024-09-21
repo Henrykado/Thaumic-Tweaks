@@ -35,7 +35,7 @@ public class ThaumicTweaks {
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
         
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
+        //MinecraftForge.EVENT_BUS.register(new EventHandler());
     }
 
     @Mod.EventHandler

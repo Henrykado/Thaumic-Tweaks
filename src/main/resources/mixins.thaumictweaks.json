@@ -1,0 +1,14 @@
+{
+  "package": "henrykado.thaumictweaks.mixin",
+  "refmap": "mixins.thaumictweaks.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinContainerResearchTable",
+    "MixinProxyBlock",
+    "MixinThaumcraftWorldGenerator"
+  ],
+  "client": ["MixinBakeBlockEvent"],
+  "server": []
+}

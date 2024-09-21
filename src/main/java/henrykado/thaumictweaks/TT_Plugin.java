@@ -1,15 +1,17 @@
-package henrykado.thaumictweaks.asm;
+package henrykado.thaumictweaks;
 
+import java.util.List;
 import java.util.Map;
+
+import com.google.common.collect.ImmutableList;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
+import zone.rong.mixinbooter.ILateMixinLoader;
 
 @IFMLLoadingPlugin.MCVersion("1.12.2")
-@IFMLLoadingPlugin.TransformerExclusions({"henrykado.thaumictweaks", "henrykado.thaumictweaks.asm"})
-public class TT_Plugin implements IFMLLoadingPlugin {
-
+public class TT_Plugin implements IFMLLoadingPlugin, ILateMixinLoader {
 	@Override
 	public String[] getASMTransformerClass() {
-		return new String[] {"henrykado.thaumictweaks.asm.TT_ClassTransformer"};
+		return null; //new String[] {"henrykado.thaumictweaks.asm.TT_ClassTransformer"};
 	}
 
 	@Override
@@ -31,5 +33,9 @@ public class TT_Plugin implements IFMLLoadingPlugin {
 	public String getAccessTransformerClass() {
 		return null;
 	}
-	
+
+	@Override
+	public List<String> getMixinConfigs() {
+		return ImmutableList.of("mixins.thaumictweaks.json");
+	}
 }
