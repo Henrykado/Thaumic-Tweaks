@@ -18,11 +18,11 @@ public class MixinThaumcraftWorldGenerator {
     public void dimensionBlacklistInject(World world, Random random, int chunkX, int chunkZ, boolean newGen, CallbackInfo ci, @Local Biome bgb, @Local(ordinal = 9) int md, @Local(ordinal = 8) int randPosY)
     {
         if (
-                ((TT_Config.DIMENSION.enableBlacklist && MixinThaumcraftWorldGenerator.isWhitelisted(TT_Config.DIMENSION.blacklist, world.provider.getDimension()))
-                || (TT_Config.DIMENSION.enableSpecificCrystalBlacklist && MixinThaumcraftWorldGenerator.specificCrystalDimensionBlacklist(world.provider.getDimension(), md)))
+                ((TT_Config.DIMENSION._enableBlacklist && MixinThaumcraftWorldGenerator.isWhitelisted(TT_Config.DIMENSION.blacklist, world.provider.getDimension()))
+                || (TT_Config.DIMENSION._enableSpecificCrystalBlacklist && MixinThaumcraftWorldGenerator.specificCrystalDimensionBlacklist(world.provider.getDimension(), md)))
 
-                || ((TT_Config.BIOME.enableBlacklist && MixinThaumcraftWorldGenerator.isWhitelisted(TT_Config.BIOME.crystalsBlacklist, Biome.getIdForBiome(bgb)))
-                || (TT_Config.BIOME.enableSpecificCrystalBlacklist && MixinThaumcraftWorldGenerator.specificCrystalDimensionBlacklist(Biome.getIdForBiome(bgb), md)))
+                || ((TT_Config.BIOME._enableBlacklist && MixinThaumcraftWorldGenerator.isWhitelisted(TT_Config.BIOME.crystalsBlacklist, Biome.getIdForBiome(bgb)))
+                || (TT_Config.BIOME._enableSpecificCrystalBlacklist && MixinThaumcraftWorldGenerator.specificCrystalDimensionBlacklist(Biome.getIdForBiome(bgb), md)))
 
                 || ((randPosY > TT_Config.crystalMaxY && TT_Config.crystalMaxY > -1)
                 || randPosY < TT_Config.crystalMinY)

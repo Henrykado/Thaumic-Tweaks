@@ -40,7 +40,7 @@ public class TT_Config {
 	public static class DimensionBlacklists
 	{
 		@Name("Enable dimension blacklist")
-		public boolean enableBlacklist = false;
+		public boolean _enableBlacklist = false;
 
 		@Comment("List of dimensions where crystals won't generate (if blacklist), \n"
 				+ "or the only dimensions it will generate (if whitelist, to make it a whitelist simply make the first entry an asterisk [*]) \n"
@@ -51,7 +51,7 @@ public class TT_Config {
 		};
 
 		@Name("Enable dimension blacklist (specific crystals)")
-		public boolean enableSpecificCrystalBlacklist = false;
+		public boolean _enableSpecificCrystalBlacklist = false;
 
 		@Name("Air Crystal dimension blacklist")
 		public String[] airCrystalBlacklist = {};
@@ -75,7 +75,7 @@ public class TT_Config {
 	public static class BiomeBlacklists
 	{
 		@Name("Enable biome blacklist")
-		public boolean enableBlacklist = false;
+		public boolean _enableBlacklist = false;
 
 		@Comment("List of biomes where crystals won't generate (if blacklist), \n"
 				+ "or the only dimensions it will generate (if whitelist, to make it a whitelist simply make the first entry an asterisk [*]) \n"
@@ -86,7 +86,7 @@ public class TT_Config {
 		};
 
 		@Name("Enable biome blacklist (specific crystals)")
-		public boolean enableSpecificCrystalBlacklist = false;
+		public boolean _enableSpecificCrystalBlacklist = false;
 
 		@Name("Air Crystal biome blacklist")
 		public String[] airCrystalBlacklist = {};
