@@ -3,6 +3,7 @@ package henrykado.thaumictweaks.mixin;
 import com.llamalad7.mixinextras.sugar.Local;
 import henrykado.thaumictweaks.TT_Config;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.Biome;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -13,93 +14,103 @@ import java.util.Random;
 
 @Mixin(ThaumcraftWorldGenerator.class)
 public class MixinThaumcraftWorldGenerator {
-    @ModifyVariable(method = "generateOres", at = @At("STORE"), ordinal = 9, remap = false,
-            slice = @Slice(
-                    from = @At(value = "INVOKE", target = "Ljava/lang/Math;round(F)I"),
-                    to = @At(value = "INVOKE", target = "Lnet/minecraft/world/WorldProvider;getDimension()V")
-            ))
-    int modifyMaxCrystals(int maxCrystals)
-    {
-        return TT_Config.crystalOreDensity > -1 ? Math.round(64.0F * ((float)TT_Config.crystalOreDensity / 100)) : maxCrystals;
-    }
-
-    @ModifyVariable(method = "generateOres", at = @At("STORE"), ordinal = 14, remap = false)
-    int modifyRandPosY(int randPosY)
-    {
-        return TT_Config.crystalMaxY > -1 ? Math.min(TT_Config.crystalMaxY, randPosY) : randPosY;
-    }
-
     @Inject(method = "generateOres", at = @At(value = "INVOKE", target = "Lthaumcraft/common/blocks/world/ore/ShardType;byMetadata(I)Lthaumcraft/common/blocks/world/ore/ShardType;", shift = At.Shift.BEFORE), cancellable = true, remap = false)
-    public void dimensionBlacklistInject(World world, Random random, int chunkX, int chunkZ, boolean newGen, CallbackInfo ci, @Local(ordinal = 16) int md)
+    public void dimensionBlacklistInject(World world, Random random, int chunkX, int chunkZ, boolean newGen, CallbackInfo ci, @Local Biome bgb, @Local(ordinal = 9) int md, @Local(ordinal = 8) int randPosY)
     {
-        if ((TT_Config.GENERATION.enableDimensionBlacklist && MixinThaumcraftWorldGenerator.crystalBlacklist(world))
-                || (TT_Config.GENERATION.enableSpecificCrystalBlacklist && MixinThaumcraftWorldGenerator.specificCrystalBlacklist(world, md))) {
+        if (
+                ((TT_Config.DIMENSION.enableBlacklist && MixinThaumcraftWorldGenerator.isWhitelisted(TT_Config.DIMENSION.blacklist, world.provider.getDimension()))
+                || (TT_Config.DIMENSION.enableSpecificCrystalBlacklist && MixinThaumcraftWorldGenerator.specificCrystalDimensionBlacklist(world.provider.getDimension(), md)))
+
+                || ((TT_Config.BIOME.enableBlacklist && MixinThaumcraftWorldGenerator.isWhitelisted(TT_Config.BIOME.crystalsBlacklist, Biome.getIdForBiome(bgb)))
+                || (TT_Config.BIOME.enableSpecificCrystalBlacklist && MixinThaumcraftWorldGenerator.specificCrystalDimensionBlacklist(Biome.getIdForBiome(bgb), md)))
+
+                || ((randPosY > TT_Config.crystalMaxY && TT_Config.crystalMaxY > -1)
+                || randPosY < TT_Config.crystalMinY)
+        )
+        {
             ci.cancel();
         }
     }
 
 
-    private static boolean crystalBlacklist(World world)
+    private static boolean isWhitelisted(String[] blacklist, int identifier)
     {
-        if (isInvalidDimension(TT_Config.GENERATION.crystalsDimensionBlacklist, world))
+        if (blacklist.length > 0)
         {
-            return false;
+            boolean isWhitelist = blacklist[0].equals("*");
+            for (int i = (isWhitelist ? 1 : 0); i < blacklist.length; i++)
+            {
+                if (identifier == Integer.parseInt(blacklist[i])) {
+                    return !isWhitelist;
+                }
+            }
+
+            return isWhitelist;
         }
-        return true;
+        return false;
     }
 
-    private static boolean specificCrystalBlacklist(World world, int md)
+    private static boolean specificCrystalDimensionBlacklist(int dimensionID, int md)
     {
         switch (ShardType.byMetadata(md))
         {
             case AIR:
-                if (isInvalidDimension(TT_Config.GENERATION.airCrystalDimensionBlacklist, world))
+                if (isWhitelisted(TT_Config.DIMENSION.airCrystalBlacklist, dimensionID))
                     return false;
                 break;
             case EARTH:
-                if (isInvalidDimension(TT_Config.GENERATION.earthCrystalDimensionBlacklist, world))
+                if (isWhitelisted(TT_Config.DIMENSION.earthCrystalBlacklist, dimensionID))
                     return false;
                 break;
             case ENTROPY:
-                if (isInvalidDimension(TT_Config.GENERATION.entropyCrystalDimensionBlacklist, world))
+                if (isWhitelisted(TT_Config.DIMENSION.entropyCrystalBlacklist, dimensionID))
                     return false;
                 break;
             case FIRE:
-                if (isInvalidDimension(TT_Config.GENERATION.fireCrystalDimensionBlacklist, world))
+                if (isWhitelisted(TT_Config.DIMENSION.fireCrystalBlacklist, dimensionID))
                     return false;
                 break;
             case ORDER:
-                if (isInvalidDimension(TT_Config.GENERATION.orderCrystalDimensionBlacklist, world))
+                if (isWhitelisted(TT_Config.DIMENSION.orderCrystalBlacklist, dimensionID))
                     return false;
                 break;
             default: // WATER
-                if (isInvalidDimension(TT_Config.GENERATION.waterCrystalDimensionBlacklist, world))
+                if (isWhitelisted(TT_Config.DIMENSION.waterCrystalBlacklist, dimensionID))
                     return false;
                 break;
         }
         return true;
     }
 
-
-    private static boolean isInvalidDimension(String[] blacklist, World world)
+    private static boolean specificCrystalBiomeBlacklist(int biomeID, int md)
     {
-        if (blacklist.length > 0)
+        switch (ShardType.byMetadata(md))
         {
-            boolean isWhitelist = blacklist[0] == "*";
-            for (int i = (isWhitelist ? 1 : 0); i < blacklist.length; i++)
-            {
-                if (!isWhitelist)
-                {
-                    if (world.provider.getDimension() == Integer.valueOf(blacklist[i]))
-                        return true;
-                }
-                else
-                {
-                    if (world.provider.getDimension() != Integer.valueOf(blacklist[i]))
-                        return true;
-                }
-            }
+            case AIR:
+                if (isWhitelisted(TT_Config.BIOME.airCrystalBlacklist, biomeID))
+                    return false;
+                break;
+            case EARTH:
+                if (isWhitelisted(TT_Config.BIOME.earthCrystalBlacklist, biomeID))
+                    return false;
+                break;
+            case ENTROPY:
+                if (isWhitelisted(TT_Config.BIOME.entropyCrystalBlacklist, biomeID))
+                    return false;
+                break;
+            case FIRE:
+                if (isWhitelisted(TT_Config.BIOME.fireCrystalBlacklist, biomeID))
+                    return false;
+                break;
+            case ORDER:
+                if (isWhitelisted(TT_Config.BIOME.orderCrystalBlacklist, biomeID))
+                    return false;
+                break;
+            default: // WATER
+                if (isWhitelisted(TT_Config.BIOME.waterCrystalBlacklist, biomeID))
+                    return false;
+                break;
         }
-        return false;
+        return true;
     }
 }

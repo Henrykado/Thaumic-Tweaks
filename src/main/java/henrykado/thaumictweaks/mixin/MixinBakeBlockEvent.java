@@ -1,5 +1,6 @@
 package henrykado.thaumictweaks.mixin;
 
+import henrykado.thaumictweaks.TT_Config;
 import henrykado.thaumictweaks.ThaumicTweaks;
 import net.minecraftforge.client.event.ModelBakeEvent;
 import org.spongepowered.asm.mixin.Mixin;
@@ -13,6 +14,7 @@ public class MixinBakeBlockEvent {
     @Inject(method = "onModelBakeEvent", at = @At("HEAD"), cancellable = true, remap = false)
     private static void onModelBakeEventInject(ModelBakeEvent event, CallbackInfo ci)
     {
+        if (!TT_Config.useCustomCrystalModel) return;
         ci.cancel();
     }
 }

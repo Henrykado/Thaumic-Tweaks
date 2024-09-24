@@ -20,12 +20,12 @@ import thaumcraft.common.blocks.world.ore.BlockCrystal;
 
 public class NewBlockCrystal extends BlockCrystal
 {
-    public static PropertyInteger RANDOM_ROTATION;
+    //public static PropertyInteger RANDOM_ROTATION;
     public static PropertyDirection FACING;
     
     public NewBlockCrystal(String name, Aspect aspect) {
         super(name, aspect);
-        setDefaultState(blockState.getBaseState().withProperty((IProperty)BlockCrystal.SIZE, (Comparable)0).withProperty((IProperty)BlockCrystal.GENERATION, (Comparable)1).withProperty(NewBlockCrystal.RANDOM_ROTATION, 0).withProperty(NewBlockCrystal.FACING, EnumFacing.DOWN));
+        setDefaultState(blockState.getBaseState().withProperty((IProperty)BlockCrystal.SIZE, (Comparable)0).withProperty((IProperty)BlockCrystal.GENERATION, (Comparable)1).withProperty(NewBlockCrystal.FACING, EnumFacing.DOWN));
     }
     
     @Override
@@ -63,7 +63,7 @@ public class NewBlockCrystal extends BlockCrystal
     @Override
     protected BlockStateContainer createBlockState()
     {
-        return new BlockStateContainer(this, new IProperty[] {BlockCrystal.SIZE, BlockCrystal.GENERATION, NewBlockCrystal.RANDOM_ROTATION, NewBlockCrystal.FACING});
+        return new BlockStateContainer(this, new IProperty[] {BlockCrystal.SIZE, BlockCrystal.GENERATION, NewBlockCrystal.FACING});
     }
     
     private boolean drawAt(IBlockAccess worldIn, BlockPos pos, EnumFacing side) {
@@ -78,7 +78,7 @@ public class NewBlockCrystal extends BlockCrystal
     
     @Override
     public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
-    	int randRotation = (Integer.lowestOneBit(pos.getX()) + Integer.lowestOneBit(pos.getY()) + Integer.lowestOneBit(pos.getZ())) % 4;
+    	//int randRotation = (Integer.lowestOneBit(pos.getX()) + Integer.lowestOneBit(pos.getY()) + Integer.lowestOneBit(pos.getZ())) % 4;
     	
     	EnumFacing enumFacing;
     	if (drawAt(worldIn, pos.down(), EnumFacing.DOWN))
@@ -106,11 +106,11 @@ public class NewBlockCrystal extends BlockCrystal
 			enumFacing = EnumFacing.NORTH;
 		}
     	
-        return state.withProperty(NewBlockCrystal.RANDOM_ROTATION, randRotation).withProperty(NewBlockCrystal.FACING, enumFacing);
+        return state.withProperty(NewBlockCrystal.FACING, enumFacing);
     }
     
     static {
     	FACING = PropertyDirection.create("facing");
-        RANDOM_ROTATION = PropertyInteger.create("rand_rot", 0, 3);
+        //RANDOM_ROTATION = PropertyInteger.create("rand_rot", 0, 3);
     }
 }

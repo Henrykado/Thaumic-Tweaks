@@ -1,18 +1,8 @@
-package henrykado.thaumictweaks.proxy;
+package henrykado.thaumictweaks;
 
-import henrykado.thaumictweaks.NewBlockCrystal;
-import henrykado.thaumictweaks.TT_Config;
-import henrykado.thaumictweaks.ThaumicTweaks;
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -23,19 +13,9 @@ import thaumcraft.Thaumcraft;
 import thaumcraft.api.aspects.Aspect;
 import thaumcraft.api.blocks.BlocksTC;
 import thaumcraft.common.blocks.world.ore.ShardType;
-import thaumcraft.common.tiles.crafting.TileResearchTable;
 
 @Mod.EventBusSubscriber
-public class CommonProxy {
-    public void preInit(FMLPreInitializationEvent e) {
-    }
-
-    public void init(FMLInitializationEvent e) {
-    }
-
-    public void postInit(FMLPostInitializationEvent e) {
-    }
-    
+public class RegistryHandler {
     @SubscribeEvent
     public static void registerBlocks(RegistryEvent.Register<Block> event) {
     	if (!TT_Config.useCustomCrystalModel) return;

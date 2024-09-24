@@ -1,16 +1,11 @@
 package henrykado.thaumictweaks;
 
-import com.google.common.collect.ImmutableList;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.Config.*;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
-
-import java.util.List;
-import java.util.Map;
 
 @EventBusSubscriber(modid = ThaumicTweaks.MODID)
 @Config(modid = ThaumicTweaks.MODID, category = "general")
@@ -22,54 +17,94 @@ public class TT_Config {
 			+ "Needs to be enabled in both server and client for it to work properly")
 	public static boolean useCustomCrystalModel = false;
 	
-	@RequiresMcRestart
+	/*@RequiresMcRestart
 	@Name("Crystal ore density override")
 	@Comment("Sets a separate ore density value exclusively for crystals, \n"
 			+ "if set to -1 it will use the general ore density value, the one set in Thaumcraft's config. \n")
-	public static int crystalOreDensity = -1;
-	
-	public static int crystalMaxY = 62;
-	
-	@Comment("Changes the hardness value of crystals, for reference, stone -> 2, obsidian -> 50")
-	@Name("Crystal hardness override")
-	public static float crystalHardness = 1;
+	public static int crystalOreDensity = -1;*/
 
-	
-	@Name("Vis Crystals Dimension Blacklists")
-	public static final Generation GENERATION = new Generation();
-	
-	public static class Generation
+	@Comment("The minimum y value that a crystal can generate in")
+	@Name("Minimum generation height")
+	public static int crystalMinY = 5;
+
+	@Comment("The maximum y value that a crystal can generate in")
+	@Name("Maximum generation height")
+	public static int crystalMaxY = -1;
+
+	@Name("Vis Crystal dimension blacklists")
+	public static final DimensionBlacklists DIMENSION = new DimensionBlacklists();
+
+	@Name("Vis Crystal biome blacklists")
+	public static final BiomeBlacklists BIOME = new BiomeBlacklists();
+
+	public static class DimensionBlacklists
 	{
-		@Name("Enable dimension generation blacklist")
-		public boolean enableDimensionBlacklist = false;
-		
+		@Name("Enable dimension blacklist")
+		public boolean enableBlacklist = false;
+
 		@Comment("List of dimensions where crystals won't generate (if blacklist), \n"
-				+ "or the only dimensions it will generate (if whitelist, to make it a whitelist simply make the first entry an asterisk [*])")
-		@Name("Dimension generation blacklist")
-		public String[] crystalsDimensionBlacklist = {
-				"4"
+				+ "or the only dimensions it will generate (if whitelist, to make it a whitelist simply make the first entry an asterisk [*]) \n"
+				+ "P.S. Use dimension IDs: The Nether -> -1, The End -> 1, The Aether -> 4, etc")
+		@Name("Dimension blacklist")
+		public String[] blacklist = {
+				"1"
 		};
-		
-		@Name("Enable (specific types) dimension generation blacklist")
+
+		@Name("Enable dimension blacklist (specific crystals)")
 		public boolean enableSpecificCrystalBlacklist = false;
-		
-		@Name("Air Crystal dimension generation blacklist")
-		public String[] airCrystalDimensionBlacklist = {};
-		
-		@Name("Fire Crystal dimension generation blacklist")
-		public String[] fireCrystalDimensionBlacklist = {};
-		
-		@Name("Earth Crystal dimension generation blacklist")
-		public String[] earthCrystalDimensionBlacklist = {};
-		
-		@Name("Water Crystal dimension generation blacklist")
-		public String[] waterCrystalDimensionBlacklist = {};
-		
-		@Name("Order (White) dimension generation blacklist")
-		public String[] orderCrystalDimensionBlacklist = {};
-		
-		@Name("Entropy (Black) dimension generation blacklist")
-		public String[] entropyCrystalDimensionBlacklist = {};
+
+		@Name("Air Crystal dimension blacklist")
+		public String[] airCrystalBlacklist = {};
+
+		@Name("Fire Crystal dimension blacklist")
+		public String[] fireCrystalBlacklist = {};
+
+		@Name("Earth Crystal dimension blacklist")
+		public String[] earthCrystalBlacklist = {};
+
+		@Name("Water Crystal dimension blacklist")
+		public String[] waterCrystalBlacklist = {};
+
+		@Name("Order (White) dimension blacklist")
+		public String[] orderCrystalBlacklist = {};
+
+		@Name("Entropy (Black) dimension blacklist")
+		public String[] entropyCrystalBlacklist = {};
+	}
+
+	public static class BiomeBlacklists
+	{
+		@Name("Enable biome blacklist")
+		public boolean enableBlacklist = false;
+
+		@Comment("List of biomes where crystals won't generate (if blacklist), \n"
+				+ "or the only dimensions it will generate (if whitelist, to make it a whitelist simply make the first entry an asterisk [*]) \n"
+				+ "P.S. Use biome IDs: Plains -> 1, Desert -> 4, The Aether -> 4, etc")
+		@Name("Biome blacklist")
+		public String[] crystalsBlacklist = {
+				"1"
+		};
+
+		@Name("Enable biome blacklist (specific crystals)")
+		public boolean enableSpecificCrystalBlacklist = false;
+
+		@Name("Air Crystal biome blacklist")
+		public String[] airCrystalBlacklist = {};
+
+		@Name("Fire Crystal biome blacklist")
+		public String[] fireCrystalBlacklist = {};
+
+		@Name("Earth Crystal biome blacklist")
+		public String[] earthCrystalBlacklist = {};
+
+		@Name("Water Crystal biome blacklist")
+		public String[] waterCrystalBlacklist = {};
+
+		@Name("Order (White) biome blacklist")
+		public String[] orderCrystalBlacklist = {};
+
+		@Name("Entropy (Black) biome blacklist")
+		public String[] entropyCrystalBlacklist = {};
 	}
 	
 	@SubscribeEvent
