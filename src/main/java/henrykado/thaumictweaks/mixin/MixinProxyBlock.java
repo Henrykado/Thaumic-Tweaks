@@ -11,7 +11,7 @@ import thaumcraft.proxies.ProxyBlock;
 
 @Mixin(ProxyBlock.class)
 public class MixinProxyBlock {
-    @Redirect(method = "setupBlocksClient", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/client/model/ModelLoader;setCustomStateMapper(Lnet/minecraft/block/Block;Lnet/minecraft/client/renderer/block/statemap/IStateMapper;)V"), remap = false)
+    @Redirect(method = "setupBlocksClient", at = @At(value = "INVOKE", target = "Lnet/minecraftforge/client/model/ModelLoader;setCustomStateMapper(Lnet/minecraft/block/Block;Lnet/minecraft/client/renderer/block/statemap/IStateMapper;)V", ordinal = 0), remap = false)
     private static void redirectCustomStateMapper(Block block, IStateMapper mapper)
     {
         if (TT_Config.useCustomCrystalModel) return;
